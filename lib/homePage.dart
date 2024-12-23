@@ -24,14 +24,8 @@ class Homepage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData || snapshot.data?.docs.isEmpty == true) {
-            return Center(child: Text('No data available'));
+          } else if (snapshot.data?.docs.isEmpty == true) {
+            return Center(child: Text("No data available"));
           }
 
           return ListView.builder(
@@ -52,11 +46,5 @@ class Homepage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void deleteData(String id) async {
-    CollectionReference data = FirebaseFirestore.instance.collection('data');
-
-    await data.doc(id).delete();
   }
 }
