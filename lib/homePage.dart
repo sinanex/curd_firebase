@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curd_firebase/add.dart';
 import 'package:curd_firebase/function.dart';
+import 'package:curd_firebase/update.dart';
 import 'package:flutter/material.dart';
 
 class Homepage extends StatelessWidget {
@@ -34,11 +35,27 @@ class Homepage extends StatelessWidget {
               final data = snapshot.data?.docs[index];
               final docId = data?.id;
               return ListTile(
-                trailing: IconButton(
-                    onPressed: () {
-                      deleteDataFireBase(docId!);
-                    },
-                    icon: Icon(Icons.delete)),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UpdatePAge(
+                                    id: docId,
+                                      title: data?['title'],
+                                      subtitle: data?['subtitle'])));
+                        },
+                        icon: Icon(Icons.update)),
+                    IconButton(
+                        onPressed: () {
+                          deleteDataFireBase(docId!);
+                        },
+                        icon: Icon(Icons.delete)),
+                  ],
+                ),
                 title: Text(data?['title'] ?? 'No title'),
               );
             },
