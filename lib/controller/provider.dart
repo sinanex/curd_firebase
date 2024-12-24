@@ -7,23 +7,38 @@ class FirebaseProvider extends ChangeNotifier {
   TextEditingController titleCrtl = TextEditingController();
   TextEditingController subtitleCrtl = TextEditingController();
   FireStoreServices firestore = FireStoreServices();
-  List<Model> data = [];
+  List<Model> fireStoreageList = [];
   void addData() async {
     try {
-      firestore.AddDataFireBase(
+      firestore.addDataToFireBase(
           Model(subtitle: subtitleCrtl.text, title: titleCrtl.text));
-      notifyListeners();
     } catch (e) {
       log("error");
     }
+    subtitleCrtl.clear();
+    titleCrtl.clear();
+    getData();
+    notifyListeners();
   }
 
   void deleteData(String id) async {
-    firestore.deleteDataFireBase(id);
+    firestore.deleteDataFromFireBase(id);
+    getData();
+    notifyListeners();
   }
 
   void editData(String id, Model firebaseData) async {
-    firestore.updateDataFireBase(
-        id, firebaseData);
+    firestore.updateDataInFireBase(id, firebaseData);
+getData();
+    notifyListeners();
   }
+   getData()async{
+  fireStoreageList = await firestore.getDataFromFireBase();
+    if(fireStoreageList.isNotEmpty){
+      log("data get success");
+    }
+    notifyListeners();
+    
+   }
+
 }

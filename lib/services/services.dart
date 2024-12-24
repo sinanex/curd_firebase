@@ -4,22 +4,45 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curd_firebase/model/model.dart';
 
 class FireStoreServices {
-  CollectionReference fireStoreData =
+  final CollectionReference fireStoreData =
       FirebaseFirestore.instance.collection('data');
-  Future<void> AddDataFireBase(Model FirebaseData) async {
+
+  Future<void> addDataToFireBase(Model firebaseData) async {
     try {
-      log("${FirebaseData.title}");
-      await fireStoreData.add(FirebaseData.ToFirestore());
+      log("Adding Data: ${firebaseData.title}");
+      await fireStoreData.add(firebaseData.ToFirestore());
     } catch (e) {
-      log("$e");
+      log("Error Adding Data: $e");
     }
   }
 
-  Future<void> deleteDataFireBase(String id) async {
-    fireStoreData.doc(id).delete();
+  Future<void> deleteDataFromFireBase(String id) async {
+    try {
+      await fireStoreData.doc(id).delete();
+      log("Deleted Data with ID: $id");
+    } catch (e) {
+      log("Error Deleting Data: $e");
+    }
   }
 
-  Future<void> updateDataFireBase(String id, Model FirebaseData) async {
-    fireStoreData.doc(id).update(FirebaseData.ToFirestore());
+  Future<void> updateDataInFireBase(String id, Model firebaseData) async {
+    try {
+      await fireStoreData.doc(id).update(firebaseData.ToFirestore());
+      log("Updated Data with ID: $id");
+    } catch (e) {
+      log("Error Updating Data: $e");
+    }
+  }
+
+  Future<List<Model>> getDataFromFireBase() async {
+    try {
+      final QuerySnapshot snapshot = await fireStoreData.get();
+      return snapshot.docs
+          .map((doc) => Model.fromFirbase(doc.data() as Map<String, dynamic>, doc.id))
+          .toList();
+    } catch (e) {
+      log("Error Fetching Data: $e");
+      throw Exception("Error Fetching Data");
+    }
   }
 }
