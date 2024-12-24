@@ -1,6 +1,8 @@
-import 'package:curd_firebase/homePage.dart';
+import 'package:curd_firebase/view/homePage.dart';
+import 'package:curd_firebase/controller/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,8 +16,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Homepage(),
+    return ChangeNotifierProvider(
+      create: (context) => FirebaseProvider(),
+      child: MaterialApp(
+        home: Homepage(),
+      ),
     );
   }
 }
