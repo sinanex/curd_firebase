@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:curd_firebase/services/services.dart';
 import 'package:curd_firebase/view/add.dart';
 import 'package:curd_firebase/controller/provider.dart';
 import 'package:curd_firebase/view/update.dart';
